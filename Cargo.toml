@@ -17,10 +17,10 @@ debug-assertions = false
 codegen-units = 16
 
 [dependencies]
-ws = {version = "0.7.6", features = ["ssl"]}
+ws = {version = "0.9.1", features = ["ssl"]}
 log = "0.4.1"
 simple_logger = "0.5.0"
-url = "1.7.2"
+url = "2.2.2"
 json = "0.11.13"
 ring = "0.13.5"
 base64 = "0.9.2"
