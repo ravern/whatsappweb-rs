@@ -385,8 +385,6 @@ impl<H: WhatsappWebHandler<H> + Send + Sync + 'static> WhatsappWebConnectionInne
     }
 
     fn ws_on_connected(&mut self, out: Sender) {
-        dbg!("ws_on_connnected");
-
         let timeout_manager = timeout::TimeoutManager::new(
             &out,
             timeout::PING_TIMEOUT,
@@ -736,6 +734,7 @@ impl<H: WhatsappWebHandler<H> + Send + Sync> WhatsappWebConnection<H> {
                     drop(inner);
                     cb(WebsocketResponse::Node(payload), &self);
                 } else {
+                    // dbg!(&payload);
                     match AppMessage::deserialize(payload) {
                         Ok(AppMessage::Contacts(contacts)) => {
                             drop(inner);
@@ -790,7 +789,9 @@ impl<H: WhatsappWebHandler<H> + Send + Sync> WhatsappWebConnection<H> {
                                 }
                             }
                         }
-                        _ => {}
+                        result => {
+                            // dbg!(result);
+                        }
                     }
                 }
             }
@@ -992,7 +993,6 @@ impl<H: WhatsappWebHandler<H> + Send + Sync> WhatsappWebConnection<H> {
         thread::spawn(move || loop {
             let last_try = SystemTime::now();
             let whatsapp_connection1 = whatsapp_connection.clone();
-            println!("connecting... last try at {:?}", last_try);
             ws::connect(ENDPOINT_URL, move |out| {
                 whatsapp_connection1
                     .inner
