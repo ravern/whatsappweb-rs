@@ -1,10 +1,10 @@
-use std::time::Duration;
 use std::str::FromStr;
+use std::time::Duration;
 
-use protobuf;
 use chrono::NaiveDateTime;
+use protobuf;
 use protobuf::Message;
-use ring::rand::{SystemRandom, SecureRandom};
+use ring::rand::{SecureRandom, SystemRandom};
 
 use super::message_wire;
 use super::Jid;
@@ -18,11 +18,18 @@ impl MessageId {
         let mut message_id_binary = vec![0u8; 12];
         message_id_binary[0] = 0x3E;
         message_id_binary[1] = 0xB0;
-        SystemRandom::new().fill(&mut message_id_binary[2..]).unwrap();
-        MessageId(message_id_binary.iter().map(|b| format!("{:X}", b)).collect::<Vec<_>>().concat())
+        SystemRandom::new()
+            .fill(&mut message_id_binary[2..])
+            .unwrap();
+        MessageId(
+            message_id_binary
+                .iter()
+                .map(|b| format!("{:X}", b))
+                .collect::<Vec<_>>()
+                .concat(),
+        )
     }
 }
-
 
 #[derive(Debug, Clone)]
 pub enum Peer {
@@ -50,7 +57,10 @@ impl Direction {
             Direction::Sending(remote_jid)
         } else {
             Direction::Receiving(if key.has_participant() {
-                Peer::Group { group: remote_jid, participant: Jid::from_str(&key.take_participant())? }
+                Peer::Group {
+                    group: remote_jid,
+                    participant: Jid::from_str(&key.take_participant())?,
+                }
             } else {
                 Peer::Individual(remote_jid)
             })
@@ -82,20 +92,34 @@ pub struct MessageAck {
 }
 
 impl MessageAck {
-    pub fn from_server_message(message_id: &str, level: MessageAckLevel, sender: Jid, receiver: Jid, participant: Option<Jid>, time: i64, own_jid: &Jid) -> MessageAck {
+    pub fn from_server_message(
+        message_id: &str,
+        level: MessageAckLevel,
+        sender: Jid,
+        receiver: Jid,
+        participant: Option<Jid>,
+        time: i64,
+        own_jid: &Jid,
+    ) -> MessageAck {
         MessageAck {
             level,
             time: Some(time),
             id: MessageId(message_id.to_string()),
             side: if own_jid == &sender {
                 MessageAckSide::There(if let Some(participant) = participant {
-                    PeerAck::GroupIndividual { group: receiver, participant }
+                    PeerAck::GroupIndividual {
+                        group: receiver,
+                        participant,
+                    }
                 } else {
                     PeerAck::Individual(receiver)
                 })
             } else {
                 MessageAckSide::Here(if let Some(participant) = participant {
-                    Peer::Group { group: sender, participant }
+                    Peer::Group {
+                        group: sender,
+                        participant,
+                    }
                 } else {
                     Peer::Individual(sender)
                 })
@@ -103,7 +127,13 @@ impl MessageAck {
         }
     }
 
-    pub fn from_app_message(message_id: MessageId, level: MessageAckLevel, jid: Jid, participant: Option<Jid>, owner: bool) -> MessageAck {
+    pub fn from_app_message(
+        message_id: MessageId,
+        level: MessageAckLevel,
+        jid: Jid,
+        participant: Option<Jid>,
+        owner: bool,
+    ) -> MessageAck {
         MessageAck {
             level,
             time: None,
@@ -116,7 +146,10 @@ impl MessageAck {
                 })
             } else {
                 MessageAckSide::Here(if let Some(participant) = participant {
-                    Peer::Group { group: jid, participant }
+                    Peer::Group {
+                        group: jid,
+                        participant,
+                    }
                 } else {
                     Peer::Individual(jid)
                 })
@@ -149,36 +182,46 @@ impl ChatMessageContent {
             ChatMessageContent::Text(message.take_conversation())
         } else if message.has_imageMessage() {
             let mut image_message = message.take_imageMessage();
-            ChatMessageContent::Image(FileInfo {
-                url: image_message.take_url(),
-                mime: image_message.take_mimetype(),
-                sha256: image_message.take_fileSha256(),
-                enc_sha256: image_message.take_fileEncSha256(),
-                size: image_message.get_fileLength() as usize,
-                key: image_message.take_mediaKey(),
-            }, (image_message.get_height(), image_message.get_width()), image_message.take_jpegThumbnail())
+            ChatMessageContent::Image(
+                FileInfo {
+                    url: image_message.take_url(),
+                    mime: image_message.take_mimetype(),
+                    sha256: image_message.take_fileSha256(),
+                    enc_sha256: image_message.take_fileEncSha256(),
+                    size: image_message.get_fileLength() as usize,
+                    key: image_message.take_mediaKey(),
+                },
+                (image_message.get_height(), image_message.get_width()),
+                image_message.take_jpegThumbnail(),
+            )
         } else if message.has_audioMessage() {
             let mut audio_message = message.take_audioMessage();
-            ChatMessageContent::Audio(FileInfo {
-                url: audio_message.take_url(),
-                mime: audio_message.take_mimetype(),
-                sha256: audio_message.take_fileSha256(),
-                enc_sha256: audio_message.take_fileEncSha256(),
-                size: audio_message.get_fileLength() as usize,
-                key: audio_message.take_mediaKey(),
-            }, Duration::new(u64::from(audio_message.get_seconds()), 0))
+            ChatMessageContent::Audio(
+                FileInfo {
+                    url: audio_message.take_url(),
+                    mime: audio_message.take_mimetype(),
+                    sha256: audio_message.take_fileSha256(),
+                    enc_sha256: audio_message.take_fileEncSha256(),
+                    size: audio_message.get_fileLength() as usize,
+                    key: audio_message.take_mediaKey(),
+                },
+                Duration::new(u64::from(audio_message.get_seconds()), 0),
+            )
         } else if message.has_documentMessage() {
             let mut document_message = message.take_documentMessage();
-            ChatMessageContent::Document(FileInfo {
-                url: document_message.take_url(),
-                mime: document_message.take_mimetype(),
-                sha256: document_message.take_fileSha256(),
-                enc_sha256: document_message.take_fileEncSha256(),
-                size: document_message.get_fileLength() as usize,
-                key: document_message.take_mediaKey(),
-            }, document_message.take_fileName())
+            ChatMessageContent::Document(
+                FileInfo {
+                    url: document_message.take_url(),
+                    mime: document_message.take_mimetype(),
+                    sha256: document_message.take_fileSha256(),
+                    enc_sha256: document_message.take_fileEncSha256(),
+                    size: document_message.get_fileLength() as usize,
+                    key: document_message.take_mediaKey(),
+                },
+                document_message.take_fileName(),
+            )
         } else {
-            ChatMessageContent::Text("TODO".to_string())
+            ChatMessageContent::Text("unsupported message type".to_string())
         })
     }
 
@@ -210,7 +253,7 @@ impl ChatMessageContent {
                 document_message.set_fileName(filename);
                 message.set_documentMessage(document_message);
             }
-            _ => unimplemented!()
+            _ => unimplemented!(),
         }
 
         message
@@ -227,10 +270,10 @@ pub struct ChatMessage {
 
 impl ChatMessage {
     pub fn from_proto_binary(content: &[u8]) -> Result<ChatMessage> {
-        let webmessage = protobuf::parse_from_bytes::<message_wire::WebMessageInfo>(content).chain_err(|| "Invalid Protobuf chatmessage")?;
+        let webmessage = protobuf::parse_from_bytes::<message_wire::WebMessageInfo>(content)
+            .chain_err(|| "Invalid Protobuf chatmessage")?;
         ChatMessage::from_proto(webmessage)
     }
-
 
     pub fn from_proto(mut webmessage: message_wire::WebMessageInfo) -> Result<ChatMessage> {
         debug!("Processing WebMessageInfo: {:?}", &webmessage);
@@ -259,7 +302,7 @@ impl ChatMessage {
                 key.set_remoteJid(jid.to_message_jid());
                 key.set_fromMe(true);
             }
-            Direction::Receiving(_) => unimplemented!()
+            Direction::Receiving(_) => unimplemented!(),
         }
         webmessage.set_key(key);
 
@@ -276,6 +319,11 @@ impl ChatMessage {
 
 impl Jid {
     pub fn to_message_jid(&self) -> String {
-        self.id.to_string() + if self.is_group { "@g.us" } else { "@s.whatsapp.net" }
+        self.id.to_string()
+            + if self.is_group {
+                "@g.us"
+            } else {
+                "@s.whatsapp.net"
+            }
     }
 }
