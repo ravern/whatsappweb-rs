@@ -21,7 +21,8 @@ use whatsappweb::media;
 use whatsappweb::message::{
     ChatMessage, ChatMessageContent, Direction, MessageAck, MessageAckLevel, MessageAckSide, Peer,
 };
-use whatsappweb::{ChatAction, Contact, GroupParticipantsChange, Jid, MediaType, PresenceStatus};
+use whatsappweb::models::Jid;
+use whatsappweb::{ChatAction, Contact, GroupParticipantsChange, MediaType, PresenceStatus};
 
 const SESSION_FILENAME: &str = "session.bin";
 

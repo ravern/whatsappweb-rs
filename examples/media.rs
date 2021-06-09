@@ -20,7 +20,8 @@ use whatsappweb::connection::{
 };
 use whatsappweb::media;
 use whatsappweb::message::{ChatMessage, ChatMessageContent};
-use whatsappweb::{Jid, MediaType};
+use whatsappweb::models::Jid;
+use whatsappweb::MediaType;
 
 const SESSION_FILENAME: &str = "session.bin";
 

@@ -3,9 +3,11 @@ use std::str::FromStr;
 use base64;
 use json::JsonValue;
 
-use super::{GroupMetadata, GroupParticipantsChange, Jid, MediaType, PresenceStatus};
-use errors::*;
-use message::MessageAckLevel;
+use crate::errors::*;
+use crate::message::MessageAckLevel;
+use crate::models::Jid;
+
+use super::{GroupMetadata, GroupParticipantsChange, MediaType, PresenceStatus};
 
 #[derive(Debug)]
 pub enum ServerMessage<'a> {
