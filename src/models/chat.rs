@@ -1,6 +1,6 @@
 use super::Jid;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Chat {
     pub name: Option<String>,
     pub jid: Jid,

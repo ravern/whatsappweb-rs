@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use crate::{Error, Result};
 
-#[derive(Clone, Debug, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq, PartialOrd, Serialize)]
 pub struct Jid {
     pub id: String,
     pub is_group: bool,
