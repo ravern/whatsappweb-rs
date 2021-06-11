@@ -2,9 +2,8 @@ use std::collections::HashMap;
 
 use crate::errors::*;
 use crate::message::{ChatMessage, MessageAck, MessageAckLevel, MessageId, Peer};
-use crate::models::Jid;
+use crate::models::{Chat, Jid};
 use crate::node_wire::{IntoCow, Node, NodeContent};
-use crate::Chat;
 use crate::ChatAction;
 use crate::Contact;
 use crate::GroupParticipantsChange;

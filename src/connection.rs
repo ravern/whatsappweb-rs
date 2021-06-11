@@ -20,7 +20,8 @@ use ws::util::{Timeout, Token};
 use ws::{CloseCode, Handler, Message, Request, Sender};
 
 use super::{
-    Chat, ChatAction, Contact, GroupMetadata, GroupParticipantsChange, MediaType, PresenceStatus,
+    models::Chat, ChatAction, Contact, GroupMetadata, GroupParticipantsChange, MediaType,
+    PresenceStatus,
 };
 use crate::crypto;
 use crate::errors::*;
