@@ -278,7 +278,7 @@ pub fn build_init_request(client_id: &str) -> JsonValue {
     array![
         "admin",
         "init",
-        array![0, 4, 2081],
+        array![2, 2121, 6],
         array!["ww-rs", "ww-rs"],
         client_id,
         true
