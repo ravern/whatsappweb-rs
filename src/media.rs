@@ -14,7 +14,7 @@ use reqwest::blocking as reqwest;
 use connection::{WhatsappWebConnection, WhatsappWebHandler};
 use crypto;
 use errors::*;
-use message::FileInfo;
+use models::FileInfo;
 use MediaType;
 
 pub fn generate_thumbnail_and_get_size(image: &[u8]) -> (Vec<u8>, (u32, u32)) {

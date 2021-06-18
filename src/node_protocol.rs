@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 use crate::errors::*;
-use crate::message::{ChatMessage, MessageAck, MessageAckLevel, MessageId, Peer};
 use crate::models::{Chat, Jid};
+use crate::models::{ChatMessage, MessageAck, MessageAckLevel, MessageId, Peer};
 use crate::node_wire::{IntoCow, Node, NodeContent};
 use crate::ChatAction;
 use crate::Contact;

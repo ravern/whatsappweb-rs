@@ -4,8 +4,7 @@ use base64;
 use json::JsonValue;
 
 use crate::errors::*;
-use crate::message::MessageAckLevel;
-use crate::models::Jid;
+use crate::models::{Jid, MessageAckLevel};
 
 use super::{GroupMetadata, GroupParticipantsChange, MediaType, PresenceStatus};
 

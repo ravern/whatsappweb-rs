@@ -19,7 +19,7 @@ use whatsappweb::connection::{
     DisconnectReason, PersistentSession, State, UserData, WhatsappWebConnection, WhatsappWebHandler,
 };
 use whatsappweb::media;
-use whatsappweb::message::{ChatMessage, ChatMessageContent};
+use whatsappweb::models::{ChatMessage, ChatMessageContent};
 use whatsappweb::models::Jid;
 use whatsappweb::MediaType;
 

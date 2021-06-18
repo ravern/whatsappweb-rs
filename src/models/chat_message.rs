@@ -6,11 +6,11 @@ use protobuf;
 use protobuf::Message;
 use ring::rand::{SecureRandom, SystemRandom};
 
-use super::message_wire;
-use super::Jid;
-use errors::*;
+use crate::{errors::*, message_wire};
 
-#[derive(Debug, Clone, PartialOrd, PartialEq)]
+use super::Jid;
+
+#[derive(Debug, Clone, PartialOrd, PartialEq, Serialize, Deserialize)]
 pub struct MessageId(pub String);
 
 impl MessageId {
@@ -31,7 +31,7 @@ impl MessageId {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Peer {
     Individual(Jid),
     Group { group: Jid, participant: Jid },
@@ -44,7 +44,7 @@ pub enum PeerAck {
     GroupAll(Jid),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum Direction {
     Sending(Jid),
     Receiving(Peer),
@@ -158,7 +158,7 @@ impl MessageAck {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct FileInfo {
     pub url: String,
     pub mime: String,
@@ -168,7 +168,7 @@ pub struct FileInfo {
     pub key: Vec<u8>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum ChatMessageContent {
     Text(String),
     Image(FileInfo, (u32, u32), Vec<u8>),
@@ -260,7 +260,7 @@ impl ChatMessageContent {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ChatMessage {
     pub direction: Direction,
     pub time: NaiveDateTime,

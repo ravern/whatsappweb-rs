@@ -16,7 +16,7 @@ use whatsappweb::connection;
 use whatsappweb::connection::{
     DisconnectReason, PersistentSession, State, UserData, WhatsappWebConnection, WhatsappWebHandler,
 };
-use whatsappweb::message::ChatMessage;
+use whatsappweb::models::ChatMessage;
 use whatsappweb::models::Jid;
 
 const SESSION_FILENAME: &str = "session.bin";

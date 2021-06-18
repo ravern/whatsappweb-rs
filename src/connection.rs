@@ -27,10 +27,9 @@ use crate::crypto;
 use crate::errors::*;
 use crate::json_protocol;
 use crate::json_protocol::ServerMessage;
-use crate::message::{
-    ChatMessage as WhatsappMessage, ChatMessageContent, Direction, MessageAck, MessageId, Peer,
+use crate::models::{
+    ChatMessage as WhatsappMessage, ChatMessageContent, Direction, Jid, MessageAck, MessageId, Peer,
 };
-use crate::models::Jid;
 use crate::node_protocol;
 use crate::node_protocol::{AppEvent, AppMessage, GroupCommand, MessageEventType, Query};
 use crate::node_wire::Node;

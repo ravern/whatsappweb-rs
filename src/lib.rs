@@ -31,7 +31,6 @@ pub mod errors;
 mod json_protocol;
 #[cfg(feature = "media")]
 pub mod media;
-pub mod message;
 mod message_wire;
 pub mod models;
 mod node_protocol;

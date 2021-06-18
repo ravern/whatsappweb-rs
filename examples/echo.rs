@@ -18,10 +18,10 @@ use image::Luma;
 use whatsappweb::connection::*;
 use whatsappweb::crypto;
 use whatsappweb::media;
-use whatsappweb::message::{
+use whatsappweb::models::Jid;
+use whatsappweb::models::{
     ChatMessage, ChatMessageContent, Direction, MessageAck, MessageAckLevel, MessageAckSide, Peer,
 };
-use whatsappweb::models::Jid;
 use whatsappweb::{ChatAction, Contact, GroupParticipantsChange, MediaType, PresenceStatus};
 
 const SESSION_FILENAME: &str = "session.bin";
